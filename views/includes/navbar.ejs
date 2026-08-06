@@ -1,0 +1,95 @@
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top shadow-sm">
+  <div class="container-fluid px-4">
+
+    <!-- LOGO -->
+    <a class="navbar-brand fw-bold text-danger" href="/">
+      <i class="fa-solid fa-compass me-1"></i> WanderLust
+    </a>
+
+    <!-- TOGGLER -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- NAV CONTENT -->
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <!-- CENTER LINKS -->
+      <div class="navbar-nav mx-auto gap-3 align-items-center">
+
+        <a class="nav-link fw-semibold" href="/">
+          <i class="fa-solid fa-house me-1"></i> Home
+        </a>
+
+        <a class="nav-link fw-semibold" href="/listings">
+          <i class="fa-solid fa-list me-1"></i> Listings
+        </a>
+
+        <a class="nav-link fw-semibold" href="/listings/new">
+          <i class="fa-solid fa-plus me-1"></i> Add
+        </a>
+
+        <!-- 🔍 SEARCH (FIXED ROUTE) -->
+        <form class="d-flex search-box" action="/listings/search" method="GET">
+
+          <input 
+            class="form-control"
+            type="search"
+            name="place"
+            placeholder="Search places (Patiala, Delhi...)"
+          >
+
+          <button class="btn btn-danger ms-2" type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+
+        </form>
+
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="d-flex align-items-center gap-3">
+
+        <!-- 🌐 GLOBE -->
+        <div class="dropdown">
+          <a class="nav-icon dropdown-toggle text-decoration-none" href="#" data-bs-toggle="dropdown">
+            <i class="fa-solid fa-globe"></i>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="?lang=en">English</a></li>
+            <li><a class="dropdown-item" href="?lang=hi">Hindi</a></li>
+            <li><a class="dropdown-item" href="?lang=pa">Punjabi</a></li>
+          </ul>
+        </div>
+
+        <!-- ❤️ -->
+        <a href="#" class="nav-icon">
+          <i class="fa-regular fa-heart"></i>
+        </a>
+
+        <!-- 🔔 -->
+        <a href="#" class="nav-icon">
+          <i class="fa-regular fa-bell"></i>
+        </a>
+
+        <!-- 👤 -->
+        <div class="dropdown">
+          <button class="btn border rounded-pill dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fa fa-user"></i>
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/login">Login</a></li>
+            <li><a class="dropdown-item" href="/signup">Signup</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/listings/new">Add Listing</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</nav>

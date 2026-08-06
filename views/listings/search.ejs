@@ -1,0 +1,51 @@
+<%- include("../includes/navbar.ejs") %>
+
+<div class="search-container">
+
+  <!-- TITLE -->
+  <div class="search-header">
+    <h2>🔍 Search Results for "<%= place %>"</h2>
+    <p class="text-muted"><%= listings.length %> results found</p>
+  </div>
+
+  <!-- LISTINGS GRID -->
+  <div class="search-grid">
+
+    <% if (listings.length === 0) { %>
+      <div class="no-results">
+        <h4>No listings found 😢</h4>
+        <p>Try another location like Delhi, Patiala, Mumbai</p>
+      </div>
+    <% } %>
+
+    <% listings.forEach(listing => { %>
+
+      <a href="/listings/<%= listing._id %>" class="card-link">
+
+        <div class="search-card">
+
+          <div class="img-box">
+            <img src="<%= listing.image %>" alt="">
+          </div>
+
+          <div class="card-body">
+            <h5><%= listing.title %></h5>
+            <p class="location">📍 <%= listing.location %>, <%= listing.country %></p>
+
+            <div class="card-footer">
+              <span class="price">₹ <%= listing.price %></span>
+              <span class="btn-view">View →</span>
+            </div>
+          </div>
+
+        </div>
+
+      </a>
+
+    <% }) %>
+
+  </div>
+
+</div>
+
+<%- include("../includes/footer") %>
