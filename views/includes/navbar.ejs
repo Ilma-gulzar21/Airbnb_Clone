@@ -1,95 +1,204 @@
-<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top shadow-sm">
-  <div class="container-fluid px-4">
+<nav class="navbar navbar-expand-md navbar-wanderlust sticky-top">
+  <div class="container-fluid navbar-container">
 
     <!-- LOGO -->
-    <a class="navbar-brand fw-bold text-danger" href="/">
-      <i class="fa-solid fa-compass me-1"></i> WanderLust
+    <a class="navbar-brand navbar-logo" href="/">
+      <i class="fa-solid fa-compass"></i>
+      <span>WanderLust</span>
     </a>
 
-    <!-- TOGGLER -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup">
-      <span class="navbar-toggler-icon"></span>
+    <!-- MOBILE TOGGLE -->
+    <button
+      class="navbar-toggler navbar-mobile-toggle"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fa-solid fa-bars"></i>
     </button>
+
 
     <!-- NAV CONTENT -->
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
-      <!-- CENTER LINKS -->
-      <div class="navbar-nav mx-auto gap-3 align-items-center">
+      <!-- MAIN NAV -->
+      <div class="navbar-main">
 
-        <a class="nav-link fw-semibold" href="/">
-          <i class="fa-solid fa-house me-1"></i> Home
+        <!-- ADD LISTING -->
+        <a class="nav-link navbar-link" href="/listings/new">
+          <i class="fa-solid fa-plus"></i>
+          <span>Add</span>
         </a>
 
-        <a class="nav-link fw-semibold" href="/listings">
-          <i class="fa-solid fa-list me-1"></i> Listings
-        </a>
 
-        <a class="nav-link fw-semibold" href="/listings/new">
-          <i class="fa-solid fa-plus me-1"></i> Add
-        </a>
+        <!-- SEARCH -->
+        <form
+          class="navbar-search"
+          action="/listings/search"
+          method="GET"
+        >
 
-        <!-- 🔍 SEARCH (FIXED ROUTE) -->
-        <form class="d-flex search-box" action="/listings/search" method="GET">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
 
-          <input 
-            class="form-control"
+          <input
             type="search"
             name="place"
-            placeholder="Search places (Patiala, Delhi...)"
+            placeholder="Search places, cities..."
+            autocomplete="off"
           >
 
-          <button class="btn btn-danger ms-2" type="submit">
-            <i class="fa fa-search"></i>
+          <button type="submit" aria-label="Search">
+            <i class="fa-solid fa-arrow-right"></i>
           </button>
 
         </form>
 
       </div>
 
+
       <!-- RIGHT SIDE -->
-      <div class="d-flex align-items-center gap-3">
+      <div class="navbar-actions">
 
-        <!-- 🌐 GLOBE -->
-        <div class="dropdown">
-          <a class="nav-icon dropdown-toggle text-decoration-none" href="#" data-bs-toggle="dropdown">
+
+        <!-- LANGUAGE -->
+        <div class="dropdown navbar-dropdown">
+
+          <button
+            class="navbar-action-btn"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            title="Language"
+          >
             <i class="fa-solid fa-globe"></i>
-          </a>
+          </button>
 
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="?lang=en">English</a></li>
-            <li><a class="dropdown-item" href="?lang=hi">Hindi</a></li>
-            <li><a class="dropdown-item" href="?lang=pa">Punjabi</a></li>
+          <ul class="dropdown-menu dropdown-menu-end navbar-menu">
+
+            <li>
+              <a class="dropdown-item" href="?lang=en">
+                <i class="fa-solid fa-language"></i>
+                English
+              </a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="?lang=hi">
+                <i class="fa-solid fa-language"></i>
+                Hindi
+              </a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="?lang=pa">
+                <i class="fa-solid fa-language"></i>
+                Punjabi
+              </a>
+            </li>
+
           </ul>
+
         </div>
 
-        <!-- ❤️ -->
-        <a href="#" class="nav-icon">
-          <i class="fa-regular fa-heart"></i>
-        </a>
 
-        <!-- 🔔 -->
-        <a href="#" class="nav-icon">
+        <!-- WISHLIST -->
+<a
+    href="/wishlist"
+    class="nav-icon"
+    title="Wishlist"
+    aria-label="Wishlist"
+>
+    <i class="fa-regular fa-heart"></i>
+</a>
+
+        <!-- NOTIFICATION -->
+        <a
+          href="#"
+          class="navbar-action-btn navbar-action-link"
+          title="Notifications"
+        >
           <i class="fa-regular fa-bell"></i>
         </a>
 
-        <!-- 👤 -->
-        <div class="dropdown">
-          <button class="btn border rounded-pill dropdown-toggle" data-bs-toggle="dropdown">
-            <i class="fa fa-user"></i>
+
+        <!-- DARK MODE -->
+        <button
+          type="button"
+          class="navbar-action-btn theme-toggle"
+          id="themeToggle"
+          title="Toggle dark mode"
+          aria-label="Toggle dark mode"
+        >
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+
+        <!-- USER -->
+        <div class="dropdown navbar-dropdown">
+
+          <button
+            class="user-menu-btn"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            title="Account"
+          >
+            <i class="fa-solid fa-user"></i>
+            <i class="fa-solid fa-chevron-down user-chevron"></i>
           </button>
 
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="/login">Login</a></li>
-            <li><a class="dropdown-item" href="/signup">Signup</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/listings/new">Add Listing</a></li>
+
+          <ul class="dropdown-menu dropdown-menu-end navbar-menu">
+
+            <% if (!currUser) { %>
+
+              <li>
+                <a class="dropdown-item" href="/login">
+                  <i class="fa-solid fa-right-to-bracket"></i>
+                  Login
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item" href="/signup">
+                  <i class="fa-solid fa-user-plus"></i>
+                  Signup
+                </a>
+              </li>
+
+            <% } else { %>
+
+              <li>
+                <a class="dropdown-item" href="/logout">
+                  <i class="fa-solid fa-right-from-bracket"></i>
+                  Logout
+                </a>
+              </li>
+
+            <% } %>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="/listings/new">
+                <i class="fa-solid fa-house-circle-plus"></i>
+                Add Listing
+              </a>
+            </li>
+
           </ul>
+
         </div>
 
       </div>
 
     </div>
+
   </div>
 </nav>
+<script src="/js/darkMode.js"></script>

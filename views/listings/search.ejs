@@ -1,51 +1,157 @@
-<%- include("../includes/navbar.ejs") %>
-
+<% layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/css/search.css">
 <div class="search-container">
+ 
+<!-- SEARCH HEADER -->
 
-  <!-- TITLE -->
-  <div class="search-header">
-    <h2>🔍 Search Results for "<%= place %>"</h2>
-    <p class="text-muted"><%= listings.length %> results found</p>
-  </div>
+    <div class="search-header">
 
-  <!-- LISTINGS GRID -->
-  <div class="search-grid">
+        <div>
+            <h2>
+                Search results for
+                <span>"<%= place %>"</span>
+            </h2>
+
+            <p>
+                <%= listings.length %>
+                <%= listings.length === 1 ? "stay" : "stays" %> found
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- NO RESULTS-->
 
     <% if (listings.length === 0) { %>
-      <div class="no-results">
-        <h4>No listings found 😢</h4>
-        <p>Try another location like Delhi, Patiala, Mumbai</p>
-      </div>
-    <% } %>
 
-    <% listings.forEach(listing => { %>
+        <div class="no-results">
 
-      <a href="/listings/<%= listing._id %>" class="card-link">
-
-        <div class="search-card">
-
-          <div class="img-box">
-            <img src="<%= listing.image %>" alt="">
-          </div>
-
-          <div class="card-body">
-            <h5><%= listing.title %></h5>
-            <p class="location">📍 <%= listing.location %>, <%= listing.country %></p>
-
-            <div class="card-footer">
-              <span class="price">₹ <%= listing.price %></span>
-              <span class="btn-view">View →</span>
+            <div class="no-results-icon">
+                <i class="fa-solid fa-magnifying-glass"></i>
             </div>
-          </div>
+
+            <h3>
+                No stays found
+            </h3>
+
+            <p>
+                We couldn't find any properties matching
+                "<%= place %>".
+            </p>
+
+            <span>
+                Try searching for another location.
+            </span>
 
         </div>
 
-      </a>
 
-    <% }) %>
+    <% } else { %>
 
-  </div>
+
+        <!-- LISTINGS GRID-->
+
+        <div class="search-grid">
+
+            <% listings.forEach(listing => { %>
+
+                <a
+                    href="/listings/<%= listing._id %>"
+                    class="search-card-link"
+                >
+
+                    <article class="search-card">
+
+                        <!-- IMAGE-->
+
+                        <div class="search-image-wrapper">
+
+                            <% if (listing.image && listing.image.url) { %>
+
+                                <img
+                                    src="<%= listing.image.url %>"
+                                    alt="<%= listing.title %>"
+                                    class="search-card-image"
+                                >
+
+                            <% } else { %>
+
+                                <div class="search-no-image">
+                                    <i class="fa-regular fa-image"></i>
+                                </div>
+
+                            <% } %>
+
+
+                            <!-- HEART -->
+
+                            <button
+                                type="button"
+                                class="search-heart"
+                                aria-label="Add to wishlist"
+                                onclick="event.preventDefault(); event.stopPropagation();"
+                            >
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+
+                        </div>
+
+
+                        <!-- CARD CONTENT-->
+
+                        <div class="search-card-content">
+
+                            <h3 class="search-card-title">
+                                <%= listing.title %>
+                            </h3>
+
+
+                            <p class="search-card-location">
+
+                                <i class="fa-solid fa-location-dot"></i>
+
+                                <span>
+                                    <%= listing.location %>
+                                    <% if (listing.country) { %>
+                                        , <%= listing.country %>
+                                    <% } %>
+                                </span>
+
+                            </p>
+
+
+                            <div class="search-card-bottom">
+
+                                <div class="search-price">
+
+                                    <strong>
+                                        ₹<%= listing.price.toLocaleString("en-IN") %>
+                                    </strong>
+
+                                    <span>
+                                        night
+                                    </span>
+
+                                </div>
+
+                                <span class="search-view">
+                                    View
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </a>
+
+            <% }) %>
+
+        </div>
+
+    <% } %>
 
 </div>
-
-<%- include("../includes/footer") %>

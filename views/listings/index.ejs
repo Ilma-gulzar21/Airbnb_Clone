@@ -1,49 +1,146 @@
 <% layout("/layouts/boilerplate") %>
+<!-- CATEGORY ICONS -->
 
-<h3 class="mt-3 mb-4 text-center">Explore Stays</h3>
+<div class="category-icons">
 
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+  <div class="category-item">
+    <i class="fa-solid fa-fire"></i>
+    <span>Trending</span>
+  </div>
 
-  <% for(let listing of allListings){ %>
+  <div class="category-item">
+    <i class="fa-solid fa-bed"></i>
+    <span>Rooms</span>
+  </div>
 
-    <div class="col">
-      <a href="/listings/<%= listing._id %>" class="listing-link">
+  <div class="category-item">
+    <i class="fa-solid fa-city"></i>
+    <span>Iconic Cities</span>
+  </div>
 
-        <div class="card listing-card position-relative">
+  <div class="category-item">
+    <i class="fa-solid fa-mountain"></i>
+    <span>Mountains</span>
+  </div>
 
-          <!-- Wishlist -->
-          <i class="fa-regular fa-heart wishlist-icon"></i>
+  <div class="category-item">
+    <i class="fa-solid fa-chess-rook"></i>
+    <span>Castles</span>
+  </div>
 
-          <!-- Image -->
-          <img
-            src="<%= listing.image.url %>"
-            class="card-img-top"
-            alt="listing_image"
-          />
+  <div class="category-item">
+    <i class="fa-solid fa-person-swimming"></i>
+    <span>Amazing Pools</span>
+  </div>
 
-          <div class="card-body">
+  <div class="category-item">
+    <i class="fa-solid fa-campground"></i>
+    <span>Campings</span>
+  </div>
 
-    <div class="d-flex justify-content-between align-items-start mb-2">
-        <b><%= listing.title %></b>
-        <span class="rating">⭐ 4.5</span>
-    </div>
+  <div class="category-item">
+    <i class="fa-solid fa-tractor"></i>
+    <span>Farms</span>
+  </div>
 
-    <p class="text-muted">
-        <i class="fa-solid fa-location-dot"></i>
-        <%= listing.location %>
-    </p>
-
-    <p class="card-text">
-        ₹ <%= listing.price.toLocaleString("en-IN") %> / night
-    </p>
+  <div class="category-item">
+    <i class="fa-solid fa-snowflake"></i>
+    <span>Arctic</span>
+  </div>
 
 </div>
 
-        </div>
+<link rel="stylesheet" href="/css/listings.css">
 
-      </a>
-    </div>
+<section class="home-listings-page">
 
-  <% } %>
+  <div class="home-listings-grid">
 
-</div>
+    <% for(let listing of allListings){ %>
+
+      <article class="home-listing-item">
+
+        <a
+          href="/listings/<%= listing._id %>"
+          class="home-listing-link"
+        >
+
+          <div class="home-listing-card">
+
+            <!-- IMAGE -->
+            <div class="home-listing-image-wrapper">
+
+              <img
+                src="<%= listing.image.url %>"
+                class="home-listing-image"
+                alt="<%= listing.title %>"
+                loading="lazy"
+              >
+
+              <!-- WISHLIST -->
+             <button 
+  type="button" 
+  class="home-listing-wishlist-btn"
+  aria-label="Favorite listing"
+>
+  <i class="fa-regular fa-heart"></i>
+</button>
+            </div>
+
+
+            <!-- CARD CONTENT -->
+            <div class="home-listing-content">
+
+              <!-- TITLE + RATING -->
+              <div class="home-listing-title-row">
+
+                <h3 class="home-listing-title">
+                  <%= listing.title %>
+                </h3>
+
+                <div class="home-listing-rating">
+                  <i class="fa-solid fa-star"></i>
+                  <span>4.5</span>
+                </div>
+
+              </div>
+
+
+              <!-- LOCATION -->
+              <p class="home-listing-location">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <span>
+                  <%= listing.location %>
+                </span>
+
+              </p>
+
+
+              <!-- PRICE -->
+              <div class="home-listing-price">
+
+                <strong>
+                  ₹<%= listing.price.toLocaleString("en-IN") %>
+                </strong>
+
+                <span>
+                  / night
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </a>
+
+      </article>
+
+    <% } %>
+
+  </div>
+
+</section>

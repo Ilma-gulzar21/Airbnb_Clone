@@ -1,193 +1,108 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
-
 const multer = require("multer");
-const { storage } = require("../cloudConfig");
+const wrapAsync = require("../utils/wrapAsync.js");
+const Listing = require("../models/listing.js");
+const listingController = require("../controllers/listings.js");
+const {validateListing} = require("../middleware.js");
+
+//CLOUDINARY
+const { storage } = require("../cloudConfig.js");
 const upload = multer({ storage });
 
-const wrapAsync = require("../utils/wrapAsync.js");
-const ExpressError = require("../utils/ExpressError.js");
-const { listingSchema } = require("../schema.js");
-const Listing = require("../models/listing.js");
-const { isLoggedIn } = require("../middleware.js");
-
-
-
-//////////////////////////////////////////////////////
-// VALIDATION MIDDLEWARE
-//////////////////////////////////////////////////////
-
-const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errMsg);
-    }
-    next();
-};
-
-//////////////////////////////////////////////////////
-// 🔍 INDEX ROUTE
-//////////////////////////////////////////////////////
-
-router.get("/", wrapAsync(async (req, res) => {
-    const allListings = await Listing.find({});
-    res.render("listings/index", { allListings });
-}));
-
-//////////////////////////////////////////////////////
-// 🔍 SEARCH ROUTE (NEW PAGE OPEN)
-//////////////////////////////////////////////////////
-
-router.get("/search", async (req, res) => {
-    let { place } = req.query;
-
-    if (!place) {
-        req.flash("error", "Please enter a location");
-        return res.redirect("/listings");
-    }
-
-    const listings = await Listing.find({
-        $or: [
-            { location: { $regex: place, $options: "i" } },
-            { title: { $regex: place, $options: "i" } }
-        ]
-    });
-
-    res.render("listings/search.ejs", { listings, place });
-});
-
-//////////////////////////////////////////////////////
-// NEW ROUTE
-//////////////////////////////////////////////////////
-
-router.get("/new", isLoggedIn, (req, res) => {
-    res.render("listings/new.ejs");
-});
-
-//////////////////////////////////////////////////////
-// CREATE ROUTE
-//////////////////////////////////////////////////////
-
-router.post(
-    "/",
+//MIDDLEWARE
+const {
     isLoggedIn,
-    upload.single("listing[image]"),
-    validateListing,
-    wrapAsync(async (req, res) => {
+    isOwner
+} = require("../middleware.js");
 
-        const newListing = new Listing(req.body.listing);
+// INDEX + CREATE
+router.route("/")
 
-        if (req.file) {
-            newListing.image = {
-                url: req.file.path,
-                filename: req.file.filename,
-            };
-        }
+    // INDEX
+    .get(wrapAsync(listingController.index))
 
-        await newListing.save();
+    // CREATE
+    .post(
+        isLoggedIn,
+        validateListing,
+        upload.single("listing[image]"),
+        wrapAsync(listingController.createListing)
+    );
 
-        req.flash("success", "New Listing Created!");
-
-        res.redirect("/listings");
-    })
+// NEW LISTING FORM
+router.get(
+    "/new",
+    isLoggedIn,
+    listingController.renderNewForm
 );
 
-//////////////////////////////////////////////////////
-// EDIT ROUTE
-//////////////////////////////////////////////////////
-
-router.get("/:id/edit", isLoggedIn, wrapAsync(async (req, res) => {
-    let { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.redirect("/listings");
-    }
-
-    const listing = await Listing.findById(id);
-
-    if (!listing) {
-        req.flash("error", "Listing does not exist!");
-        return res.redirect("/listings");
-    }
-
-    res.render("listings/edit.ejs", { listing });
-}));
-
-//////////////////////////////////////////////////////
-// SHOW ROUTE
-//////////////////////////////////////////////////////
-
-router.get("/:id", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.redirect("/listings");
-    }
-
-    const listing = await Listing.findById(id).populate("reviews");
-
-    if (!listing) {
-        req.flash("error", "Listing does not exist!");
-        return res.redirect("/listings");
-    }
-
-    res.render("listings/show.ejs", { listing });
-}));
-
-//////////////////////////////////////////////////////
-// UPDATE ROUTE
-//////////////////////////////////////////////////////
-
-router.put(
-    "/:id",
-    isLoggedIn,
-    upload.single("listing[image]"),
-    validateListing,
+// SEARCH
+// IMPORTANT: /search should come before /:id
+router.get(
+    "/search",
     wrapAsync(async (req, res) => {
-
-        let { id } = req.params;
-
-        if (!mongoose.Types.ObjectId.isValid(id)) {
+        const { place } = req.query;
+        if (!place) {
+            req.flash("error","Please enter a location");
             return res.redirect("/listings");
         }
+        const listings = await Listing.find({
+            $or:[{ location: {
+                        $regex: place,
+                        $options: "i"
+                    }
+                },
 
-        let listing = await Listing.findByIdAndUpdate(
-            id,
-            { ...req.body.listing },
-            { new: true }
+                {
+                    title: {
+                        $regex: place,
+                        $options: "i"
+                    }
+                },
+
+                {
+                    country: {
+                        $regex: place,
+                        $options: "i"
+                    }
+                }
+            ]
+        });
+
+        res.render("listings/search.ejs",{listings,place}
         );
 
-        if (req.file) {
-            listing.image = {
-                url: req.file.path,
-                filename: req.file.filename,
-            };
-
-            await listing.save();
-        }
-
-        req.flash("success", "Listing Updated!");
-
-        res.redirect(`/listings/${id}`);
     })
 );
-//////////////////////////////////////////////////////
-// DELETE ROUTE
-//////////////////////////////////////////////////////
 
-router.delete("/:id", isLoggedIn, wrapAsync(async (req, res) => {
-    let { id } = req.params;
+// EDIT LISTING PAGE
+router.get(
+    "/:id/edit",
+    isLoggedIn,
+    isOwner,
+    wrapAsync(listingController.editListings)
+);
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.redirect("/listings");
-    }
+// SHOW + UPDATE
+router.route("/:id")
+    // SHOW
+    .get(wrapAsync(listingController.showListings))
 
-    await Listing.findByIdAndDelete(id);
+    // UPDATE
+    .put(
+        isLoggedIn,
+        isOwner,
+        upload.single("listing[image]"),
+        validateListing,
+        wrapAsync(listingController.updateListing)
+    )
 
-    req.flash("success", "Listing Deleted!");
-    res.redirect("/listings");
-}));
+    // DELETE
+    .delete(
+        isLoggedIn,
+        isOwner,
+        wrapAsync(listingController.deleteListings)
+    );
 
 module.exports = router;

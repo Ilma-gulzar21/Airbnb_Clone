@@ -10,7 +10,7 @@ async function main() {
 }
 
 main()
-.then(() => initDB())   // 👈 DB connect hone ke baad hi initDB chale
+.then(() => initDB())  
 .catch(err => console.log(err));
 
 const initDB = async () => {
@@ -18,7 +18,7 @@ const initDB = async () => {
 
     const modifiedData = initData.data.map((obj) => ({
         ...obj,
-        image: obj.image.url   // 👈 object se sirf URL nikal rahe
+        image: obj.image.url 
     }));
 
     await Listing.insertMany(modifiedData);

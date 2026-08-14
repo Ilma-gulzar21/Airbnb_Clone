@@ -16,11 +16,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text&family=Lato&family=Open+Sans&family=Poppins&family=Raleway&display=swap" rel="stylesheet">
 
-    <!-- YOUR CSS (LAST - IMPORTANT) -->
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
     <link rel="stylesheet" href="/css/style.css" />
+
+
 </head>
 
-<body>
+    <body data-logged-in="<%= currUser ? 'true' : 'false' %>">
+   <script> window.isUserLoggedIn =<%= currUser ? "true" : "false" %>; </script>
 
     <!-- NAVBAR -->
     <%- include("../includes/navbar.ejs") %>
@@ -39,6 +45,9 @@
 
     <!-- YOUR JS -->
     <script src="/js/script.js"></script>
+    <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+   </script>
 
 </body>
 </html>

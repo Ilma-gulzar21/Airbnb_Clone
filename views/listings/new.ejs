@@ -1,12 +1,9 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
-
+<div class="row mt-4">
   <div class="col-8 offset-2">
 
-    <br><br>
-
-    <h1>Create a New Listing</h1>
+    <h1 class="mb-4">Create a New Listing</h1>
 
     <form
       method="POST"
@@ -17,7 +14,6 @@
     >
 
       <!-- Title -->
-
       <div class="mb-3">
         <label class="form-label">Title</label>
 
@@ -32,10 +28,14 @@
         <div class="valid-feedback">
           Title looks good!
         </div>
+
+        <div class="invalid-feedback">
+          Please enter a title.
+        </div>
       </div>
 
-      <!-- Description -->
 
+      <!-- Description -->
       <div class="mb-3">
 
         <label class="form-label">
@@ -56,8 +56,8 @@
 
       </div>
 
-      <!-- Upload Image -->
 
+      <!-- Upload Image -->
       <div class="mb-3">
 
         <label class="form-label">
@@ -68,7 +68,7 @@
           type="file"
           name="listing[image]"
           class="form-control"
-          accept="image/*"
+          accept="image/png,image/jpeg,image/jpg,image/webp"
           required
         >
 
@@ -78,8 +78,8 @@
 
       </div>
 
-      <!-- Price & Country -->
 
+      <!-- Price & Country -->
       <div class="row">
 
         <div class="mb-3 col-md-4">
@@ -93,6 +93,7 @@
             name="listing[price]"
             placeholder="1200"
             class="form-control"
+            min="0"
             required
           >
 
@@ -101,6 +102,7 @@
           </div>
 
         </div>
+
 
         <div class="mb-3 col-md-8">
 
@@ -124,8 +126,8 @@
 
       </div>
 
-      <!-- Location -->
 
+      <!-- Location -->
       <div class="mb-3">
 
         <label class="form-label">
@@ -144,16 +146,22 @@
           Please enter location.
         </div>
 
+        <small class="text-muted">
+          Enter the actual city or area so the map can find the location.
+        </small>
+
       </div>
 
-      <button class="btn btn-dark add-btn mt-3">
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="btn btn-dark add-btn mt-3"
+      >
         Add Listing
       </button>
-
-      <br><br>
 
     </form>
 
   </div>
-
 </div>
